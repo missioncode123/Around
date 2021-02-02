@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/olivere/elastic"
 )
 
@@ -23,7 +23,7 @@ type User struct {
 	Gender   string `json:"gender"`
 }
 
-var mySigningKey = []byte("secret")
+var mySigningKey = []byte("****")
 
 func checkUser(username, password string) (bool, error) {
 	query := elastic.NewTermQuery("username", username)
@@ -67,6 +67,9 @@ func handlerLogin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one login request")
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
 
 	if r.Method == "OPTIONS" {
 		return
@@ -113,6 +116,9 @@ func handlerSignup(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one signup request")
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
 
 	if r.Method == "OPTIONS" {
 		return

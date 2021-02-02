@@ -1,5 +1,5 @@
 FROM golang:1.13.4
-MAINTAINER xuetitang@gmail.com
+MAINTAINER *******@gmail.com
 
 WORKDIR /go/src/around
 ADD . /go/src/around
@@ -7,7 +7,7 @@ ADD . /go/src/around
 RUN go get cloud.google.com/go/storage
 RUN go get cloud.google.com/go/vision/apiv1 
 RUN go get github.com/auth0/go-jwt-middleware
-RUN go get github.com/dgrijalva/jwt-go
+RUN go get github.com/form3tech-oss/jwt-go
 RUN go get github.com/gorilla/mux
 RUN go get github.com/pborman/uuid
 RUN go get github.com/olivere/elastic

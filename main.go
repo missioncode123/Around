@@ -13,7 +13,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/olivere/elastic"
 	"github.com/pborman/uuid"
@@ -23,8 +23,8 @@ const (
 	POST_INDEX = "post"
 	DISTANCE   = "200km"
 
-	ES_URL      = "http://10.128.0.2:9200"
-	BUCKET_NAME = "mission-bucket"
+	ES_URL      = "http://0.0.0.0:0000"
+	BUCKET_NAME = "****"
 )
 
 var (
@@ -59,12 +59,12 @@ type Post struct {
 func main() {
 	fmt.Println("started-service")
 
-	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
-		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-			return []byte(mySigningKey), nil
-		},
-		SigningMethod: jwt.SigningMethodHS256,
-	})
+    jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
+        ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+     	 return []byte(mySigningKey), nil
+        },
+        SigningMethod: jwt.SigningMethodHS256,
+   })
 
 	r := mux.NewRouter()
 
@@ -72,7 +72,7 @@ func main() {
 	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET", "OPTIONS")
 	r.Handle("/cluster", jwtMiddleware.Handler(http.HandlerFunc(handlerCluster))).Methods("GET", "OPTIONS")
 	r.Handle("/signup", http.HandlerFunc(handlerSignup)).Methods("POST", "OPTIONS")
-	r.Handle("/login", http.HandlerFunc(handlerLogin)).Methods("POST", "OPTIONS")
+	r.Handle("/login", http.HandlerFunc(handlerLogin)).Methods("POST", "OPTIONS") 
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
@@ -82,15 +82,16 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one post request")
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	if r.Method == "OPTIONS" {
 		return
 	}
 
-	user := r.Context().Value("user")
-	claims := user.(*jwt.Token).Claims
-	username := claims.(jwt.MapClaims)["username"]
+    user := r.Context().Value("user")
+    claims := user.(*jwt.Token).Claims
+    username := claims.(jwt.MapClaims)["username"]
 
 	lat, _ := strconv.ParseFloat(r.FormValue("lat"), 64)
 	lon, _ := strconv.ParseFloat(r.FormValue("lon"), 64)
@@ -152,7 +153,8 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	if r.Method == "OPTIONS" {
 		return
@@ -190,7 +192,8 @@ func handlerCluster(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one cluster request")
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	if r.Method == "OPTIONS" {
 		return

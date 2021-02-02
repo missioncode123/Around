@@ -11,7 +11,7 @@ const (
 	POST_INDEX = "post"
 	USER_INDEX = "user"
 
-	ES_URL = "http://10.128.0.2:9200"
+	ES_URL = "http://0.0.0.0:0000"
 )
 
 func main() {
